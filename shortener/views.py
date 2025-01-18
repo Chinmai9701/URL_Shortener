@@ -82,16 +82,12 @@ def redirect_to_original(request, short_code):
         url = get_object_or_404(ShortenedURL, short_code=short_code)
         
         if url.is_expired():
-            if request.headers.get('Accept') == 'application/json':
-                return JsonResponse({'error': 'URL has expired'}, status=410)
             messages.error(request, 'This URL has expired')
             return redirect('home')
         
         if url.password:
             provided_password = request.GET.get('password')
             if not provided_password or provided_password != url.password:
-                if request.headers.get('Accept') == 'application/json':
-                    return HttpResponseForbidden('Password required or incorrect')
                 return render(request, 'shortener/password_required.html', {'short_code': short_code})
 
         # Log access
