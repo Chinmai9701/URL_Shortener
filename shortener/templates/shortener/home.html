@@ -1,0 +1,50 @@
+{% extends 'shortener/base.html' %}
+
+{% block title %}Shorten URL{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="text-center mb-4">Shorten Your URL</h2>
+        
+        <form class="url-form" method="post" action="{% url 'home' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="url" class="form-label">Long URL</label>
+                <input type="url" class="form-control" id="url" name="url" required
+                       placeholder="https://example.com/your/long/url">
+            </div>
+            
+            <div class="mb-3">
+                <label for="expiry_hours" class="form-label">Expiry Hours</label>
+                <input type="number" class="form-control" id="expiry_hours" name="expiry_hours"
+                       value="24" min="1" max="720">
+            </div>
+            
+            <div class="mb-3">
+                <label for="password" class="form-label">Password (Optional)</label>
+                <input type="password" class="form-control" id="password" name="password"
+                       placeholder="Leave empty for no password protection">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Shorten URL</button>
+        </form>
+
+        {% if shortened_url %}
+        <div class="alert alert-success">
+            {% if is_already_shortened %}
+                <h4 class="alert-heading">URL already Shortened</h4>
+            {% else %}
+                <h4 class="alert-heading">URL Shortened Successfully!</h4>
+            {% endif %}
+            <p>Short URL: <a href="{{ shortened_url }}" target="_blank">{{ shortened_url }}</a></p>
+            <p> Short Code: {{ short_code }}</p>
+            <p>Expires at: {{ expires_at }}</p>
+            {% if password %}
+                <p class="mb-0"><small>Remember your password to access this URL!</small></p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

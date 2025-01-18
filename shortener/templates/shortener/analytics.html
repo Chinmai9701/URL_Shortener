@@ -1,0 +1,62 @@
+{% extends 'shortener/base.html' %}
+
+{% block title %}URL Analytics{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="text-center mb-4">URL Analytics</h2>
+        
+        <form class="url-form" method="get">
+            <div class="mb-3">
+                <label for="short_code" class="form-label">Short Code</label>
+                <input type="text" class="form-control" id="short_code" name="short_code" required
+                       placeholder="Enter the short code (e.g., abc123)">
+            </div>
+            
+            <div class="mb-3">
+                <label for="password" class="form-label">Password (if required)</label>
+                <input type="password" class="form-control" id="password" name="password"
+                       placeholder="Enter password if URL is protected">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">View Analytics</button>
+        </form>
+
+        {% if analytics %}
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Analytics for: {{ analytics.short_code }}</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Original URL:</strong> <a href="{{ analytics.original_url }}" target="_blank">{{ analytics.original_url }}</a></p>
+                <p><strong>Created:</strong> {{ analytics.created_at }}</p>
+                <p><strong>Expires:</strong> {{ analytics.expires_at }}</p>
+                <p><strong>Status:</strong> {% if analytics.is_expired %}<span class="text-danger">Expired</span>{% else %}<span class="text-success">Active</span>{% endif %}</p>
+                <p><strong>Total Accesses:</strong> {{ analytics.total_accesses }}</p>
+                
+                {% if analytics.recent_accesses %}
+                <h6 class="mt-4">Recent Accesses</h6>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>IP Address</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for access in analytics.recent_accesses %}
+                        <tr>
+                            <td>{{ access.timestamp }}</td>
+                            <td>{{ access.ip_address }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 
