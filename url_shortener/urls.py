@@ -20,6 +20,7 @@ from shortener import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.startup_page, name='startup_page'),
     path('shorten/', views.home, name='home'),
     path('analytics/', views.analytics_lookup, name='analytics_lookup'),
     path('<str:short_code>/', views.redirect_to_original, name='redirect_to_original'),

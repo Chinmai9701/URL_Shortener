@@ -20,6 +20,9 @@ def generate_short_code(url):
     hash_object = hashlib.sha256(hash_input)
     return hash_object.hexdigest()[:7]
 
+def startup_page(request):
+    return redirect('home')
+    
 def home(request):
     if request.method == 'POST':
         url = request.POST.get('url')
